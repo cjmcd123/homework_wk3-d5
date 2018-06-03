@@ -5,7 +5,7 @@ class Film
   attr_reader :id
   attr_accessor :title, :price
 
-  def initialize( options )
+  def initialize(options)
     @id = options['id'].to_i if options['id']
     @title = options['title']
     @price = options['price']
@@ -45,6 +45,14 @@ class Film
     values = [@id]
     results = SqlRunner.run(sql, values)
     return results.map{|result| Customer.new(result)}
+  end
+
+  def tickets()
+    sql = "SELECT * FROM tickets WHERE film_id = $1"
+    values = [@id]
+    tickets = SqlRunner.run(sql, values)
+    result = tickets.map{|ticket|}
+    return result.length
   end
 
   def self.add_film(title, price)

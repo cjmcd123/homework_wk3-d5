@@ -5,7 +5,7 @@ class Customer
   attr_reader :id
   attr_accessor :name, :funds
 
-  def initialize( options )
+  def initialize(options)
     @id = options['id'].to_i if options['id']
     @name = options['name']
     @funds = options['funds']
@@ -46,6 +46,15 @@ class Customer
     values = [@id]
     SqlRunner.run(sql, values)
   end
+
+  def tickets()
+    sql = "SELECT * FROM tickets WHERE customer_id = $1"
+    values = [@id]
+    tickets = SqlRunner.run(sql, values)
+    result = tickets.map{|ticket|}
+    return result.length
+  end
+
 
   def self.add_customer(name, funds)
     customer = Customer.new({'name' => name, 'funds' => funds})
