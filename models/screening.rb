@@ -3,7 +3,7 @@ require_relative("../db/sql_runner")
 class Screening
 
   attr_reader :id
-  attr_accessor :film_id, :screeing_time, :max_tickets, :tickets_sold
+  attr_accessor :film_id, :screeing_time, :max_tickets
 
   def initialize(options)
     @id = options['id'].to_i if options['id']
@@ -60,21 +60,15 @@ class Screening
   end
 
   def self.best_screening(id_film)
-    # answer = []
-    # films = self.film(id_film)
-    # for movie in films
-    #   result = movie.tickets_sold.to_i
-    #   answer << result
-    # end
-    # return answer
-    sql = "SELECT films.title, screenings.* FROM films, screenings
-          INNER JOIN tickets
-          On tickets.screening_id = screenings.id
-          WHERE screenings.film_id = $1"
-    values = [id_film]
-    films = SqlRunner.run(sql, values)
-    result = films.map{|film| Screening.new(film)}
-    return result
+    screening = 0
+    films = self.film(id_film)
+    for film in films
+      result = film.tickets_sold()
+      if result > screening
+        screening = result
+      end
+      return film
+    end
   end
 
   def self.all()

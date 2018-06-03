@@ -57,7 +57,7 @@ class Ticket
   def self.add_ticket(customer_id, film_id, screening_id)
     ticket = Ticket.new({'customer_id' => customer_id, 'film_id' => film_id, 'screening_id' => screening_id})
     screening = ticket.screening()
-    if screening.tickets_sold.to_i <= screening.max_tickets.to_i
+    if screening.tickets_sold().to_i <= screening.max_tickets.to_i
       ticket.save()
       person = ticket.customer()
       fund = person.funds.to_i
