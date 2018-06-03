@@ -66,9 +66,10 @@ class Screening
       result = film.tickets_sold()
       if result > screening
         screening = result
+        answer = film
       end
-      return film
     end
+    return answer
   end
 
   def self.all()
