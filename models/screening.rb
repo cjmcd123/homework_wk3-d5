@@ -60,13 +60,21 @@ class Screening
   end
 
   def self.best_screening(id_film)
-    answer = []
-    films = self.film(id_film)
-    for movie in films
-      result = movie.tickets_sold.to_i
-      answer << result
-    end
-    return answer
+    # answer = []
+    # films = self.film(id_film)
+    # for movie in films
+    #   result = movie.tickets_sold.to_i
+    #   answer << result
+    # end
+    # return answer
+    sql = "SELECT films.title, screenings.* FROM films, screenings
+          INNER JOIN tickets
+          On tickets.screening_id = screenings.id
+          WHERE screenings.film_id = $1"
+    values = [id_film]
+    films = SqlRunner.run(sql, values)
+    result = films.map{|film| Screening.new(film)}
+    return result
   end
 
   def self.all()

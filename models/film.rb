@@ -55,6 +55,15 @@ class Film
     return result.length
   end
 
+  def screenings()
+    sql = "SELECT screenings.* FROM screenings
+      WHERE film_id = $1
+      ORDER by screenings.screeing_time;"
+    values = [@id]
+    results = SqlRunner.run(sql, values)
+    return results.map{|result| Screening.new(result)}
+  end
+
   def self.add_film(title, price)
     film = Film.new({'title' => title, 'price' => price})
     film.save()
